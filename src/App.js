@@ -1,26 +1,60 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Switch, Route, Redirect} from "react-router-dom";
+import {connect} from "react-redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import QuestionPage from './components/QuestionPage'
+import ResultPage from './components/ResultPage'
+import Loader from "./components/Loader";
+
+import {getQuestions} from './actions'
+
+const routes = [
+    {
+        id: 1,
+        path: "/questions",
+        component: QuestionPage
+    },
+    {
+        id: 2,
+        path: "/results",
+        component: ResultPage
+    }
+];
+
+class App extends React.Component {
+
+    componentDidMount() {
+        this.props.getQuestions()
+    }
+
+    render() {
+        return (
+            <div className='wrapper'>
+                <Loader flag={this.props.isFetching}>
+                    <Switch>
+                        {routes.map(el =>
+                            <Route
+                                exact path={el.path}
+                                key={el.id}
+                                component={el.component}
+                            />
+                        )}
+                        <Redirect exact from='/' to='/questions'/>
+                    </Switch>
+                </Loader>
+            </div>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        isFetching: state.main.isFetching,
+    }
+};
+
+const mapDispatchToProps = {
+    getQuestions
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
