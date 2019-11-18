@@ -28,7 +28,7 @@ class ResultPage extends React.Component {
             <div className='main'>
                 <div  className='result-page' style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
                     <h2>Ваш результат: {score} из {quiz.length}</h2>
-                    <button className='result-page__button' onClick={this.tryAgain}>Попробывать еще раз</button>
+                    <button className='result-page__button' onClick={this.tryAgain}>Попробовать еще раз</button>
                     <button className='result-page__button' onClick={this.showDetailedResults}>Показать детальный результат</button>
                 </div>
                 {this.state.showMoreDetails ? quiz.map(el => <ResultBlock key={el.id} {...el} answers={userAnswers}/>) : null}
